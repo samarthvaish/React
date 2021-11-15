@@ -4,9 +4,6 @@ export class NewsItem extends Component {
   render() {
     let { title, description, imageUrl, newsUrl } = this.props;
     return (
-      //   <div>
-      //     <h3>News Item</h3>
-      //   </div>
       <div className="my-3">
         <div className="card">
           <img
