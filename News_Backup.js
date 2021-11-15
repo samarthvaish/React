@@ -42,16 +42,12 @@ export class News extends Component {
     page: PropTypes.number,
     country: PropTypes.string,
   };
-
-  async fetchNews() {
-    let url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=${this.newsApiKey}&page=${this.state.page}&pageSize=${this.props.pageSize}`;
+  async componentDidMount() {
+    let url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=${this.newsApiKey}&page=1&pageSize=${this.props.pageSize}`;
+    this.setState({ loading: true });
     let data = await fetch(url);
     let parseData = await data.json();
-    return parseData;
-  }
-  async componentDidMount() {
-    this.setState({ loading: true });
-    let parseData = await this.fetchNews();
+    console.log(parseData.articles);
     this.setState({
       articles: parseData.articles,
       totalResults: parseData.totalResults,
@@ -63,8 +59,16 @@ export class News extends Component {
     this.setState({
       page: this.state.page - 1,
     });
+    let url = `https://newsapi.org/v2/top-headlines?country=${
+      this.props.country
+    }&category=${this.props.category}&apiKey=${this.newsApiKey}&page=${
+      this.state.page - 1
+    }&pageSize=${this.props.pageSize}`;
     this.setState({ loading: true });
-    let parseData = await this.fetchNews();
+
+    let data = await fetch(url);
+    let parseData = await data.json();
+    console.log(parseData.articles);
     this.setState({ articles: parseData.articles, loading: false });
   };
   handleNextClick = async () => {
@@ -72,7 +76,14 @@ export class News extends Component {
       page: this.state.page + 1,
       loading: true,
     });
-    let parseData = await this.fetchNews();
+    let url = `https://newsapi.org/v2/top-headlines?country=${
+      this.props.country
+    }&category=${this.props.category}&apiKey=${this.newsApiKey}&page=${
+      this.state.page + 1
+    }&pageSize=${this.props.pageSize}`;
+    let data = await fetch(url);
+    let parseData = await data.json();
+    console.log(parseData.articles);
     this.setState({ articles: parseData.articles, loading: false });
   };
 
