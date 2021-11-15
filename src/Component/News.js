@@ -2,8 +2,9 @@ import React, { Component } from "react";
 import NewsItem from "./NewsItem";
 import { Spinner } from "./Spinner";
 import PropTypes from "prop-types";
-
+require("dotenv").config();
 export class News extends Component {
+  newsApiKey = process.env.REACT_APP_NewsApiKey;
   articles = [
     {
       source: { id: null, name: "Livemint" },
@@ -20,6 +21,7 @@ export class News extends Component {
         "Lunar eclipse 2021: The world is set to witness the longest partial lunar eclipse in 580 years next week, on 19 November. The eclipse will also be visible from North America, South America, eastern A… [+2279 chars]",
     },
   ];
+
   constructor() {
     super();
     this.state = {
@@ -41,7 +43,7 @@ export class News extends Component {
     country: PropTypes.string,
   };
   async componentDidMount() {
-    let url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=4e9c730d1bb24c0f90b1e93fee8545db&page=1&pageSize=${this.props.pageSize}`;
+    let url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=${this.newsApiKey}&page=1&pageSize=${this.props.pageSize}`;
     this.setState({ loading: true });
     let data = await fetch(url);
     let parseData = await data.json();
@@ -59,9 +61,7 @@ export class News extends Component {
     });
     let url = `https://newsapi.org/v2/top-headlines?country=${
       this.props.country
-    }&category=${
-      this.props.category
-    }&apiKey=4e9c730d1bb24c0f90b1e93fee8545db&page=${
+    }&category=${this.props.category}&apiKey=${this.newsApiKey}&page=${
       this.state.page - 1
     }&pageSize=${this.props.pageSize}`;
     this.setState({ loading: true });
@@ -78,9 +78,7 @@ export class News extends Component {
     });
     let url = `https://newsapi.org/v2/top-headlines?country=${
       this.props.country
-    }&category=${
-      this.props.category
-    }&apiKey=4e9c730d1bb24c0f90b1e93fee8545db&page=${
+    }&category=${this.props.category}&apiKey=${this.newsApiKey}&page=${
       this.state.page + 1
     }&pageSize=${this.props.pageSize}`;
     let data = await fetch(url);
