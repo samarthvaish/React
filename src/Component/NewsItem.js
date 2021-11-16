@@ -1,8 +1,16 @@
 import React, { Component } from "react";
 
 export class NewsItem extends Component {
+  indianTime = (isoDate) => {
+    // date = new Date(isoDate);
+    let s = new Date(isoDate).toLocaleString(undefined, {
+      timeZone: "Asia/Kolkata",
+    });
+    // date.getDate() + "-" + (date.getMonth() + 1) + "-" + date.getFullYear() + "  " + date
+    return s;
+  };
   render() {
-    let { title, description, imageUrl, newsUrl } = this.props;
+    let { title, description, imageUrl, newsUrl, author, isoDate } = this.props;
     return (
       <div className="my-3">
         <div className="card">
@@ -24,7 +32,16 @@ export class NewsItem extends Component {
                 ? description.slice(0, 80) + "..."
                 : description}
             </p>
-            <a href={newsUrl} target="_blank" className="btn btn-primary">
+            <p>
+              By {author ? author : "Unknow"} on {this.indianTime(isoDate)}
+            </p>
+
+            <a
+              href={newsUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn btn-primary"
+            >
               Read more
             </a>
           </div>

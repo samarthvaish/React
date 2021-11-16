@@ -112,6 +112,7 @@ export class News extends Component {
             disabled={this.state.page <= 1}
             onClick={this.handlePreviousClick}
             type="button"
+            
             className="btn btn-dark"
           >
             &larr; Previous

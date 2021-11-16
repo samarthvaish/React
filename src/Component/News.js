@@ -22,20 +22,24 @@ export class News extends Component {
     },
   ];
 
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
       articles: this.articles,
       loading: false,
       totalResults: null,
       page: 1,
     };
+    document.title = `${this.capitalizeFirstLetter(
+      this.props.category
+    )} - NewMonkey`;
   }
 
   static defaultProps = {
     country: "in",
     category: "general",
     pageSize: 9,
+    page: 1,
   };
   static propTypes = {
     category: PropTypes.string,
@@ -57,15 +61,21 @@ export class News extends Component {
       totalResults: parseData.totalResults,
       loading: false,
     });
+    window.scrollTo(0, 0);
   }
+  capitalizeFirstLetter = (string) => {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+  };
 
   handlePreviousClick = async () => {
     this.setState({
       page: this.state.page - 1,
+      loading: true,
     });
-    this.setState({ loading: true });
+    // this.setState({ });
     let parseData = await this.fetchNews();
     this.setState({ articles: parseData.articles, loading: false });
+    window.scrollTo(0, 0);
   };
   handleNextClick = async () => {
     this.setState({
@@ -74,12 +84,16 @@ export class News extends Component {
     });
     let parseData = await this.fetchNews();
     this.setState({ articles: parseData.articles, loading: false });
+    window.scrollTo(0, 0);
   };
 
   render() {
     return (
       <div className="container my-3">
-        <h1 className="text-center">NewMonkey - Top Headlines</h1>
+        <h1 className="text-center">
+          NewMonkey - Top {this.capitalizeFirstLetter(this.props.category)}{" "}
+          Headlines
+        </h1>
         {this.state.loading && <Spinner />}
         <div className="row">
           {!this.state.loading &&
@@ -91,6 +105,8 @@ export class News extends Component {
                     description={element.description ? element.description : ""}
                     imageUrl={element.urlToImage}
                     newsUrl={element.url}
+                    author={element.author}
+                    isoDate={element.publishedAt}
                   />
                 </div>
               );
